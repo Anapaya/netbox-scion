@@ -1,0 +1,8 @@
+# Production Dockerfile for NetBox with SCION Plugin
+FROM netboxcommunity/netbox:latest
+
+# Copy plugin requirements
+COPY plugin_requirements.txt /opt/netbox/
+
+# Install plugins using uv (NetBox's current package manager)
+RUN /usr/local/bin/uv pip install -r /opt/netbox/plugin_requirements.txt

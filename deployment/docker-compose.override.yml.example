@@ -1,0 +1,13 @@
+# Example docker-compose.override.yml for NetBox SCION Plugin
+# Copy this to docker-compose.override.yml in your netbox-docker directory
+
+version: '3.4'
+services:
+  netbox:
+    build:
+      context: .
+      dockerfile: Dockerfile-Plugins
+  netbox-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile-Plugins
