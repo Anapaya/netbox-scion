@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 # Optional: minimal dynamic metadata defers to setup.py for now.
 [project]
 name = "netbox_scion"
-version = "1.3.2"
+version = "1.3.3"
 description = "NetBox plugin for managing SCION Links Assignment"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -29,6 +29,6 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/aciupac/netbox-scion"
-Source = "https://github.com/aciupac/netbox-scion"
-Issues = "https://github.com/aciupac/netbox-scion/issues"
+Homepage = "https://github.com/anapaya/netbox-scion"
+Source = "https://github.com/anapaya/netbox-scion"
+Issues = "https://github.com/anapaya/netbox-scion/issues"

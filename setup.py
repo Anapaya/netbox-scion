@@ -5,11 +5,11 @@ with open('README.md', encoding='utf-8') as fh:
 
 setup(
     name='netbox_scion',
-    version='1.3.2',
+    version='1.3.3',
     description='NetBox plugin for managing SCION Links Assignment',
     long_description=long_desc,
     long_description_content_type='text/markdown',
-    url='https://github.com/aciupac/netbox-scion',
+    url='https://github.com/anapaya/netbox-scion',
     author='Anapaya Systems AG',
     author_email='ops@anapaya.net',
     license='Apache-2.0',

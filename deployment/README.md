@@ -1,65 +1,19 @@
 # NetBox SCION Plugin - Advanced Deployment Guide
 
-This guide covers advanced installation methods, custom Docker builds, local development, and detailed troubleshooting for the NetBox SCION plugin.
+This guide covers advanced installation methods, custom Docker builds, local development, and detailed troubleshooting.
 
-**For simple installation, see the main [README.md](../README.md) first.**
+> **Prerequisites:** Before using this guide, complete the basic installation from the main [README.md](../README.md).
 
-## 🚀 Deployment Methods
+This guide is for users who need:
+- Local development with custom wheel files
+- Alternative installation methods (pip fallback)
+- Detailed troubleshooting and debugging
+- Custom Docker image builds
+- Development and testing workflows
 
-### Method 1: Production Deployment (Recommended)
+## Advanced Deployment Methods
 
-This is the recommended production approach using a custom Dockerfile.
-
-#### Files Required:
-- `Dockerfile-Plugins` - Main production Dockerfile
-- `plugin_requirements.txt` - Plugin dependencies
-- `docker-compose.override.yml` - Docker compose overrides
-
-#### Setup:
-
-**1. Create plugin requirements file:**
-```bash
-# Create plugin_requirements.txt in your netbox-docker directory
-echo "netbox-scion==1.3.2" > plugin_requirements.txt
-```
-
-**2. Create Dockerfile-Plugins:**
-```dockerfile
-FROM netboxcommunity/netbox:latest
-
-COPY plugin_requirements.txt /opt/netbox/
-RUN /usr/local/bin/uv pip install -r /opt/netbox/plugin_requirements.txt
-```
-
-**3. Configure plugins:**
-```python
-# Edit configuration/plugins.py
-PLUGINS = [
-    'netbox_scion',
-    # Your other plugins...
-]
-```
-
-**4. Create docker-compose.override.yml:**
-```yaml
-services:
-  netbox:
-    build:
-      context: .
-      dockerfile: Dockerfile-Plugins
-  netbox-worker:
-    build:
-      context: .
-      dockerfile: Dockerfile-Plugins
-```
-
-**5. Build and deploy:**
-```bash
-docker-compose build
-docker-compose up -d
-```
-
-### Method 2: Local Development with Wheel File
+### Method 1: Local Development with Wheel File
 
 For testing local changes or unreleased versions.
 
@@ -86,25 +40,33 @@ docker build -f Dockerfile.netbox-local -t netbox-scion-dev .
 # Update your docker-compose to use this image
 ```
 
-### Method 3: Alternative with pip (Fallback)
+### Method 2: Alternative with pip (Fallback)
 
-If uv package manager is not available in your NetBox image.
+If the `uv` package manager is not available in your NetBox Docker image:
 
-#### Setup:
 ```dockerfile
 # Dockerfile.netbox-pip
 FROM netboxcommunity/netbox:latest
 
 USER root
-RUN apt-get update && apt-get install -y python3-pip && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python3-pip && \
+    rm -rf /var/lib/apt/lists/*
+RUN pip install netbox-scion==1.3.3
+```
 
-## 🔧 Development and Testing
+Then rebuild your containers:
+```bash
+docker-compose build
+docker-compose up -d
+```
+
+## Development and Testing
 
 ### Local Development Setup
 
 **1. Clone and setup:**
 ```bash
-git clone https://github.com/aciupac/netbox-scion.git
+git clone https://github.com/anapaya/netbox-scion.git
 cd netbox-scion
 
 # Install in development mode
@@ -142,172 +104,107 @@ docker-compose build netbox netbox-worker
 docker-compose restart netbox netbox-worker
 ```
 
-## 📁 Files Included
+## Advanced Troubleshooting
 
-### Docker Files:
-- `Dockerfile-Plugins` - Production deployment with PyPI installation
-- `Dockerfile.netbox-local` - Local development with wheel files
-- `Dockerfile.netbox-pip` - Alternative using pip instead of uv
+> For basic troubleshooting, see the main [README.md](../README.md).
 
-### Configuration Files:
-- `plugin_requirements.txt` - Plugin dependencies
-- `configuration.py.example` - Example NetBox configuration
-- `netbox.env.example` - Example environment variables
-- `docker-compose.yml` - Example Docker Compose setup
+### Deep Debugging
 
-### Plugin Files:
-- `plugins/netbox_scion-1.3-py3-none-any.whl` - Current plugin wheel
-
-## 🐛 Troubleshooting
-
-### Plugin Not Loading
-
-**Check installation:**
+**Check Python import chain:**
 ```bash
-# Docker
-docker exec netbox pip show netbox-scion
-
-# System
-/opt/netbox/venv/bin/pip show netbox-scion
+docker exec netbox python -c "import netbox_scion; print(netbox_scion.__version__)"
 ```
 
-**Check configuration:**
+**Inspect loaded plugins:**
 ```bash
-# Verify plugin is in PLUGINS list
-docker exec netbox grep -A 10 "PLUGINS" /etc/netbox/configuration.py
+docker exec netbox python /opt/netbox/netbox/manage.py shell -c "from django.conf import settings; print(settings.PLUGINS)"
 ```
 
-**Check logs:**
+**View detailed logs:**
 ```bash
-# Docker logs
-docker logs netbox 2>&1 | grep -i scion
+# Docker: Full logs with timestamps
+docker logs --tail=100 -f netbox 2>&1 | grep -i "scion\|plugin\|error"
 
-# System logs
-sudo journalctl -u netbox -f | grep -i scion
+# System: Journal logs with plugin context
+sudo journalctl -u netbox -n 100 -f | grep -i "scion\|plugin"
 ```
 
-### Common Issues
+### Common Advanced Issues
 
-**1. Plugin not in sidebar:**
-- Clear browser cache (Ctrl+F5)
-- Check that `'netbox_scion'` is in PLUGINS list
-- Restart NetBox services
-
-**2. Import errors:**
+**1. Database migration conflicts:**
 ```bash
-# Test Python import
-docker exec netbox python -c "import netbox_scion; print('OK')"
+# Show all migrations
+docker exec netbox python /opt/netbox/netbox/manage.py showmigrations
+
+# Fake a specific migration if needed (use with caution)
+docker exec netbox python /opt/netbox/netbox/manage.py migrate netbox_scion --fake
+
+# Rollback to specific migration
+docker exec netbox python /opt/netbox/netbox/manage.py migrate netbox_scion 0017
 ```
 
-**3. Database migration issues:**
+**2. Plugin version mismatches:**
 ```bash
-# Check migrations
-docker exec netbox python /opt/netbox/netbox/manage.py showmigrations netbox_scion
+# Check installed vs required version
+docker exec netbox pip list | grep netbox-scion
+docker exec netbox cat /opt/netbox/plugin_requirements.txt | grep netbox-scion
 
-# Run migrations manually if needed
-docker exec netbox python /opt/netbox/netbox/manage.py migrate
+# Force reinstall specific version
+docker exec netbox pip install --force-reinstall netbox-scion==1.3.3
 ```
 
-**4. Version conflicts:**
-- Ensure NetBox v4.0+ compatibility
-- Check plugin version matches requirements.txt
-- Verify no conflicting plugins
-
-### Navigation Location
-
-The plugin creates a **"SCION"** section in the main sidebar with:
-- Organizations
-- ISD-ASes
-- SCION Link Assignments
-
-Look for it in the main navigation, not under a "Plugins" submenu.
-
-## 🔍 Verification Checklist
-
-✅ **Installation Check:**
+**3. Custom field conflicts:**
 ```bash
-docker exec netbox pip show netbox-scion
+# Inspect custom fields
+docker exec netbox python /opt/netbox/netbox/manage.py shell -c \
+  "from extras.models import CustomField; print(list(CustomField.objects.filter(name__icontains='scion').values()))"
 ```
 
-✅ **Plugin Import:**
+**4. API endpoint not responding:**
 ```bash
-docker exec netbox python -c "import netbox_scion"
+# Test API endpoint directly
+curl -H "Authorization: Token YOUR_TOKEN" \
+     -H "Accept: application/json" \
+     http://your-netbox/api/plugins/scion/organizations/
+
+# Check Django URL patterns
+docker exec netbox python /opt/netbox/netbox/manage.py show_urls | grep scion
 ```
 
-✅ **Database Migration:**
-```bash
-docker exec netbox python /opt/netbox/netbox/manage.py showmigrations netbox_scion
-```
-
-✅ **Web Interface:**
-- Login to NetBox web interface  
-- Look for "SCION" in sidebar navigation
-- Access: Organizations, ISD-ASes, SCION Link Assignments
-
-✅ **API Access:**
-- `/api/plugins/scion/organizations/`
-- `/api/plugins/scion/isd-ases/` 
-- `/api/plugins/scion/link-assignments/`
-
-## 📞 Support
+## Support
 
 **For issues:**
-- 🐛 [GitHub Issues](https://github.com/aciupac/netbox-scion/issues)
-- 💬 [GitHub Discussions](https://github.com/aciupac/netbox-scion/discussions)
-- 📖 [Main README](../README.md)
+- [GitHub Issues](https://github.com/anapaya/netbox-scion/issues)
+- [GitHub Discussions](https://github.com/anapaya/netbox-scion/discussions)
+- [Main README](../README.md)
 
 **Legacy Installation Cleanup:**
 If upgrading from older versions:
 ```bash
 # Remove old installations
 pip uninstall netbox-scion
-pip install netbox-scion==1.3.2
+pip install netbox-scion==1.3.3
 
 # Clear Python cache
 find . -name "*.pyc" -delete
 find . -name "__pycache__" -type d -exec rm -rf {} +
 ```
 
-## 📊 Plugin Structure
+## 📚 API Documentation
 
-```
-SCION (Top-level menu):
-├── Organizations
-│   ├── List/Add/Edit/Delete
-│   └── Export to CSV/Excel
-├── ISD-ASes  
-│   ├── List/Add/Edit/Delete
-│   ├── Core nodes management
-│   └── Organization association
-└── SCION Link Assignments
-    ├── List/Add/Edit/Delete
-    ├── Customer management
-    ├── Zendesk ticket integration
-    └── Advanced filtering
-```
+For complete API documentation including authentication, request/response examples, filtering, error handling, and Python code samples, see:
 
-## 🔗 API Examples
+**➡️ [API.md](../API.md)** - Comprehensive REST API Documentation
 
-Create an organization:
-```bash
-curl -X POST https://your-netbox/api/plugins/scion/organizations/ \
-  -H "Authorization: Token YOUR_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"short_name": "ACME", "full_name": "ACME Corporation"}'
-```
-
-Create an ISD-AS:
-```bash
-curl -X POST https://your-netbox/api/plugins/scion/isd-ases/ \
-  -H "Authorization: Token YOUR_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"isd_as": "1-ff00:0:110", "organization": 1, "cores": ["core1.example.com"]}'
-```
-
-## 📝 License
-
-Apache License 2.0
+The API.md file includes:
+- Complete endpoint reference for Organizations, ISD-ASes, and Link Assignments
+- Authentication methods (Token and Session)
+- Full request/response examples with curl
+- Filtering and search parameters
+- Pagination and export formats
+- Error handling and validation rules
+- Python code examples using requests library
 
 ---
 
-**For simple installation instructions, see the main [README.md](../README.md).**
+**For standard installation, see the main [README.md](../README.md).**
