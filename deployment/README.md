@@ -22,7 +22,8 @@ For testing local changes or unreleased versions.
 **1. Copy your wheel file:**
 ```bash
 # Copy your built wheel to plugins/ directory
-cp netbox_scion-1.3-py3-none-any.whl plugins/
+# Replace X.Y with your actual version number
+cp netbox_scion-X.Y-py3-none-any.whl plugins/
 ```
 
 **2. Use local Dockerfile:**
@@ -51,7 +52,7 @@ FROM netboxcommunity/netbox:latest
 USER root
 RUN apt-get update && apt-get install -y python3-pip && \
     rm -rf /var/lib/apt/lists/*
-RUN pip install netbox-scion==1.4
+RUN pip install netbox-scion==X.Y
 ```
 
 Then rebuild your containers:
@@ -150,7 +151,7 @@ docker exec netbox pip list | grep netbox-scion
 docker exec netbox cat /opt/netbox/plugin_requirements.txt | grep netbox-scion
 
 # Force reinstall specific version
-docker exec netbox pip install --force-reinstall netbox-scion==1.4
+docker exec netbox pip install --force-reinstall netbox-scion==X.Y
 ```
 
 **3. Custom field conflicts:**
@@ -183,7 +184,7 @@ If upgrading from older versions:
 ```bash
 # Remove old installations
 pip uninstall netbox-scion
-pip install netbox-scion==1.4
+pip install netbox-scion==X.Y
 
 # Clear Python cache
 find . -name "*.pyc" -delete

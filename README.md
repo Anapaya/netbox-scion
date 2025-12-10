@@ -113,4 +113,3 @@ The plugin adds a "SCION" section to the NetBox sidebar with:
 ## 📝 License
 
 Apache License 2.0
->>>>>>> 5a4fa61 (netbox_plugin: initial PR in Anapaya REPO)

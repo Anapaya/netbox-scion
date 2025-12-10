@@ -1,1 +1,1 @@
-netbox_scion==1.3
+netbox_scion==X.Y
