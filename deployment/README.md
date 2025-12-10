@@ -51,7 +51,7 @@ FROM netboxcommunity/netbox:latest
 USER root
 RUN apt-get update && apt-get install -y python3-pip && \
     rm -rf /var/lib/apt/lists/*
-RUN pip install netbox-scion==1.3.3
+RUN pip install netbox-scion==1.4
 ```
 
 Then rebuild your containers:
@@ -150,7 +150,7 @@ docker exec netbox pip list | grep netbox-scion
 docker exec netbox cat /opt/netbox/plugin_requirements.txt | grep netbox-scion
 
 # Force reinstall specific version
-docker exec netbox pip install --force-reinstall netbox-scion==1.3.3
+docker exec netbox pip install --force-reinstall netbox-scion==1.4
 ```
 
 **3. Custom field conflicts:**
@@ -183,7 +183,7 @@ If upgrading from older versions:
 ```bash
 # Remove old installations
 pip uninstall netbox-scion
-pip install netbox-scion==1.3.3
+pip install netbox-scion==1.4
 
 # Clear Python cache
 find . -name "*.pyc" -delete

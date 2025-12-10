@@ -5,7 +5,7 @@ with open('README.md', encoding='utf-8') as fh:
 
 setup(
     name='netbox_scion',
-    version='1.3.3',
+    version='1.4',
     description='NetBox plugin for managing SCION Links Assignment',
     long_description=long_desc,
     long_description_content_type='text/markdown',

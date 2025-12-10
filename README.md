@@ -6,7 +6,7 @@ A comprehensive NetBox plugin for managing SCION (Scalability, Control, and Isol
 [![Python Version](https://img.shields.io/pypi/pyversions/netbox-scion)](https://pypi.org/project/netbox-scion/)
 [![License](https://img.shields.io/github/license/anapaya/netbox-scion)](https://github.com/anapaya/netbox-scion/blob/main/LICENSE)
 
-## ✨ Features
+## Features
 
 - **Organizations:** Manage SCION operators with metadata and descriptions
 - **ISD-ASes:** Track Isolation Domain and Autonomous System identifiers with appliances (CORE/EDGE)
@@ -15,13 +15,7 @@ A comprehensive NetBox plugin for managing SCION (Scalability, Control, and Isol
 - **Export:** CSV and Excel export capabilities
 - **Advanced Filtering:** Search, dropdown filters, and tag-based filtering on all list pages
 
-## 📦 Installation
-
-```bash
-pip install netbox-scion==1.3.3
-```
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - NetBox v4.0+ (Docker or system installation)
@@ -37,7 +31,7 @@ For [netbox-docker](https://github.com/netbox-community/netbox-docker) deploymen
 
 ```bash
 # 1. Add plugin to plugin_requirements.txt
-echo "netbox-scion==1.3.3" >> plugin_requirements.txt
+echo "netbox-scion" >> plugin_requirements.txt
 
 # 2. Add to configuration/plugins.py
 PLUGINS = ['netbox_scion']
@@ -54,7 +48,7 @@ For native NetBox installations:
 ```bash
 # 1. Install in NetBox virtual environment
 source /opt/netbox/venv/bin/activate
-pip install netbox-scion==1.3.3
+pip install netbox-scion
 
 # 2. Add to configuration.py
 PLUGINS = ['netbox_scion']
@@ -93,67 +87,14 @@ The plugin provides a full REST API with CRUD operations, filtering, and paginat
 - Error handling
 - Python code examples
 
-## 🎯 Navigation
+## Navigation
 
 The plugin adds a "SCION" section to the NetBox sidebar with:
 - Organizations
-- ISD-ASes  
+- ISD-ASes
 - SCION Link Assignments
 
-## 📁 Development
-
-### For Plugin Users
-**You don't need to clone this repository!** Simply install via pip using the instructions above.
-
-### For Contributors & Developers
-
-Only clone this repository if you want to:
-- Contribute code changes
-- Customize the plugin
-- Use local development builds
-- Test unreleased features
-
-```bash
-# Clone and setup for development
-git clone https://github.com/anapaya/netbox-scion.git
-cd netbox-scion
-
-# Install in development mode
-pip install -e .
-
-# For advanced deployment scenarios
-cp -r deployment/* /path/to/your/netbox-docker/
-```
-
-See [**deployment/README.md**](deployment/README.md) for advanced installation methods including custom Docker images and local wheel files.
-
-### Project Structure
-```
-netbox_scion/
-├── __init__.py              # Plugin configuration
-├── models.py                # Data models
-├── forms.py                 # Web forms
-├── views.py                 # Web views
-├── urls.py                  # URL routing
-├── api/                     # REST API
-├── templates/               # HTML templates
-├── migrations/              # Database migrations
-└── static/                  # CSS/JS assets
-```
-
-### Local Development
-```bash
-# Install in development mode
-pip install -e .
-
-# Run migrations
-python manage.py migrate
-
-# Create wheel package
-python setup.py bdist_wheel
-```
-
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Quick Fixes
 
