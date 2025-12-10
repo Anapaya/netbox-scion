@@ -6,7 +6,7 @@ from .. import filtersets, models
 from .serializers import OrganizationSerializer, ISDASSerializer, SCIONLinkAssignmentSerializer
 
 
-class ISDACoreLookupView(View):
+class ISDASCoreLookupView(View):
     """
     AJAX endpoint to get available cores for a specific ISD-AS
     """
@@ -31,7 +31,7 @@ class OrganizationViewSet(NetBoxModelViewSet):
     filterset_class = filtersets.OrganizationFilterSet
 
 
-class ISDAViewSet(NetBoxModelViewSet):
+class ISDASViewSet(NetBoxModelViewSet):
     queryset = models.ISDAS.objects.select_related('organization').prefetch_related('link_assignments').annotate(
         link_assignments_count=Count('link_assignments')
     )

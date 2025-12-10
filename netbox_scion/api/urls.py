@@ -7,9 +7,9 @@ app_name = 'netbox_scion'
 router = NetBoxRouter()
 router.register('organizations', views.OrganizationViewSet)
 # Use hyphenated paths to follow NetBox conventions
-router.register('isd-ases', views.ISDAViewSet)
+router.register('isd-ases', views.ISDASViewSet)
 router.register('link-assignments', views.SCIONLinkAssignmentViewSet)
 
 urlpatterns = router.urls + [
-    path('isdas-cores/', views.ISDACoreLookupView.as_view(), name='isdas-cores'),
+    path('isdas-cores/', views.ISDASCoreLookupView.as_view(), name='isdas-cores'),
 ]
