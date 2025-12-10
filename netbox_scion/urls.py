@@ -32,11 +32,11 @@ urlpatterns = (
     path('isd-ases/<int:pk>/remove-appliance/<str:appliance_name>/', views.remove_appliance_from_isdas, name='remove_appliance'),
 
     # SCION Link Assignment URLs
-    path('link-assignments/', views.SCIONLinkAssignmentListView.as_view(), name='scionlinkassignment_list'),
-    path('link-assignments/add/', views.SCIONLinkAssignmentEditView.as_view(), name='scionlinkassignment_add'),
-    path('link-assignments/delete/', views.SCIONLinkAssignmentBulkDeleteView.as_view(), name='scionlinkassignment_bulk_delete'),
-    path('link-assignments/<int:pk>/', views.SCIONLinkAssignmentView.as_view(), name='scionlinkassignment'),
-    path('link-assignments/<int:pk>/edit/', views.SCIONLinkAssignmentEditView.as_view(), name='scionlinkassignment_edit'),
-    path('link-assignments/<int:pk>/delete/', views.SCIONLinkAssignmentDeleteView.as_view(), name='scionlinkassignment_delete'),
-    path('link-assignments/<int:pk>/changelog/', views.SCIONLinkAssignmentChangeLogView.as_view(), name='scionlinkassignment_changelog', kwargs={'model': models.SCIONLinkAssignment}),
+    path('links/', views.SCIONLinkAssignmentListView.as_view(), name='scionlinkassignment_list'),
+    path('links/add/', views.SCIONLinkAssignmentEditView.as_view(), name='scionlinkassignment_add'),
+    path('links/delete/', views.SCIONLinkAssignmentBulkDeleteView.as_view(), name='scionlinkassignment_bulk_delete'),
+    path('links/<int:pk>/', views.SCIONLinkAssignmentView.as_view(), name='scionlinkassignment'),
+    path('links/<int:pk>/edit/', views.SCIONLinkAssignmentEditView.as_view(), name='scionlinkassignment_edit'),
+    path('links/<int:pk>/delete/', views.SCIONLinkAssignmentDeleteView.as_view(), name='scionlinkassignment_delete'),
+    path('links/<int:pk>/changelog/', views.SCIONLinkAssignmentChangeLogView.as_view(), name='scionlinkassignment_changelog', kwargs={'model': models.SCIONLinkAssignment}),
 )

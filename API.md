@@ -409,16 +409,16 @@ Manage SCION link interface assignments between appliances and peers.
 ### Base Endpoint (Link Assignments)
 
 ```text
-/api/plugins/scion/link-assignments/
+/api/plugins/scion/links/
 ```
 
 ### List Link Assignments
 
-**GET** `/api/plugins/scion/link-assignments/`
+**GET** `/api/plugins/scion/links/`
 
 ```bash
 curl -X GET \
-  "https://netbox.example.com/api/plugins/scion/link-assignments/" \
+  "https://netbox.example.com/api/plugins/scion/links/" \
   -H "Authorization: Token your-api-token" \
   -H "Content-Type: application/json"
 ```
@@ -435,7 +435,7 @@ Fields returned now include `status`, `local_underlay`, `peer_underlay`, `ticket
   "results": [
     {
       "id": 1,
-      "url": "https://netbox.example.com/api/plugins/scion/link-assignments/1/",
+      "url": "https://netbox.example.com/api/plugins/scion/links/1/",
       "display": "1-ff00:0:110 - Interface 1",
       "isd_as": {
         "id": 1,
@@ -459,7 +459,7 @@ Fields returned now include `status`, `local_underlay`, `peer_underlay`, `ticket
     },
     {
       "id": 2,
-      "url": "https://netbox.example.com/api/plugins/scion/link-assignments/2/",
+      "url": "https://netbox.example.com/api/plugins/scion/links/2/",
       "display": "1-ff00:0:110 - Interface 2",
       "isd_as": {
         "id": 1,
@@ -484,11 +484,11 @@ Fields returned now include `status`, `local_underlay`, `peer_underlay`, `ticket
 
 ### Get Link Assignment
 
-**GET** `/api/plugins/scion/link-assignments/{id}/`
+**GET** `/api/plugins/scion/links/{id}/`
 
 ```bash
 curl -X GET \
-  "https://netbox.example.com/api/plugins/scion/link-assignments/1/" \
+  "https://netbox.example.com/api/plugins/scion/links/1/" \
   -H "Authorization: Token your-api-token" \
   -H "Content-Type: application/json"
 ```
@@ -498,7 +498,7 @@ curl -X GET \
 ```json
 {
   "id": 1,
-  "url": "https://netbox.example.com/api/plugins/scion/link-assignments/1/",
+  "url": "https://netbox.example.com/api/plugins/scion/links/1/",
   "display": "1-ff00:0:110 - Interface 1",
   "isd_as": {
     "id": 1,
@@ -524,11 +524,11 @@ curl -X GET \
 
 ### Create Link Assignment
 
-**POST** `/api/plugins/scion/link-assignments/`
+**POST** `/api/plugins/scion/links/`
 
 ```bash
 curl -X POST \
-  "https://netbox.example.com/api/plugins/scion/link-assignments/" \
+  "https://netbox.example.com/api/plugins/scion/links/" \
   -H "Authorization: Token your-api-token" \
   -H "Content-Type: application/json" \
   -d '{
@@ -571,7 +571,7 @@ You may optionally include `status` (defaults to ACTIVE), `local_underlay`, `pee
 ```json
 {
   "id": 3,
-  "url": "https://netbox.example.com/api/plugins/scion/link-assignments/3/",
+  "url": "https://netbox.example.com/api/plugins/scion/links/3/",
   "display": "1-ff00:0:110 - Interface 3",
   "isd_as": {
     "id": 1,
@@ -597,11 +597,11 @@ You may optionally include `status` (defaults to ACTIVE), `local_underlay`, `pee
 
 ### Update Link Assignment
 
-**PATCH** `/api/plugins/scion/link-assignments/{id}/`
+**PATCH** `/api/plugins/scion/links/{id}/`
 
 ```bash
 curl -X PATCH \
-  "https://netbox.example.com/api/plugins/scion/link-assignments/3/" \
+  "https://netbox.example.com/api/plugins/scion/links/3/" \
   -H "Authorization: Token your-api-token" \
   -H "Content-Type: application/json" \
   -d '{
@@ -614,11 +614,11 @@ curl -X PATCH \
 
 ### Delete Link Assignment
 
-**DELETE** `/api/plugins/scion/link-assignments/{id}/`
+**DELETE** `/api/plugins/scion/links/{id}/`
 
 ```bash
 curl -X DELETE \
-  "https://netbox.example.com/api/plugins/scion/link-assignments/3/" \
+  "https://netbox.example.com/api/plugins/scion/links/3/" \
   -H "Authorization: Token your-api-token"
 ```
 
@@ -676,13 +676,13 @@ curl "https://netbox.example.com/api/plugins/scion/isd-ases/?q=ff00"
 
 ```bash
 # Filter by relationship type
-curl "https://netbox.example.com/api/plugins/scion/link-assignments/?relationship=CHILD"
+curl "https://netbox.example.com/api/plugins/scion/links/?relationship=CHILD"
 
 # Filter by ISD-AS identifier
-curl "https://netbox.example.com/api/plugins/scion/link-assignments/?isd_as__isd_as=1-ff00:0:110"
+curl "https://netbox.example.com/api/plugins/scion/links/?isd_as__isd_as=1-ff00:0:110"
 
 # Search for a ticket fragment
-curl "https://netbox.example.com/api/plugins/scion/link-assignments/?q=54321"
+curl "https://netbox.example.com/api/plugins/scion/links/?q=54321"
 ```
 
 ### Pagination
@@ -713,7 +713,7 @@ curl "https://netbox.example.com/api/plugins/scion/isd-ases/?format=csv" \
   -H "Authorization: Token your-api-token"
 
 # Export link assignments to CSV
-curl "https://netbox.example.com/api/plugins/scion/link-assignments/?format=csv" \
+curl "https://netbox.example.com/api/plugins/scion/links/?format=csv" \
   -H "Authorization: Token your-api-token"
 ```
 
@@ -844,7 +844,7 @@ if response.status_code == 201:
         }
         
         link_response = requests.post(
-            f"{BASE_URL}/link-assignments/",
+            f"{BASE_URL}/links/",
             headers=HEADERS,
             data=json.dumps(link_data)
         )

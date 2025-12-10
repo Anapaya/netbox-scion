@@ -163,7 +163,7 @@
 async function confirmApplianceDelete(applianceName, isdasPk) {
     try {
         // Count how many SCION link assignments would be affected
-        const response = await fetch(`/api/plugins/scion/link-assignments/?isd_as_id=${isdasPk}&core=${encodeURIComponent(applianceName)}`);
+        const response = await fetch(`/api/plugins/scion/links/?isd_as_id=${isdasPk}&core=${encodeURIComponent(applianceName)}`);
         const data = await response.json();
         const assignmentCount = data.count || 0;
         

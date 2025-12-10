@@ -78,7 +78,7 @@ The plugin provides a full REST API with CRUD operations, filtering, and paginat
 
 - **Organizations:** `/api/plugins/scion/organizations/`
 - **ISD-ASes:** `/api/plugins/scion/isd-ases/`
-- **Link Assignments:** `/api/plugins/scion/link-assignments/`
+- **Links:** `/api/plugins/scion/links/`
 
 **📖 Complete API Documentation:** See [**API.md**](API.md) for comprehensive documentation including:
 - Authentication methods
