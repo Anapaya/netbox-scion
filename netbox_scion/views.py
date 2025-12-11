@@ -82,7 +82,7 @@ class ISDAView(generic.ObjectView):
 
 
 class ISDAListView(generic.ObjectListView):
-    queryset = models.ISDAS.objects.select_related('organization').prefetch_related('link_assignments')
+    queryset = models.ISDAS.objects.select_related('organization').prefetch_related('links')
     table = tables.ISDATable
     filterset = filtersets.ISDAFilterSet
     filterset_form = forms.ISDAFilterForm
@@ -162,11 +162,11 @@ def edit_appliance_in_isdas(request, pk, appliance_name):
                     isdas.appliances = appliances
                     isdas.save()
                     
-                    # Update all SCION link assignments that use this appliance
-                    assignments = models.SCIONLink.objects.filter(
+                    # Update all SCION links that use this appliance
+                    links = models.SCIONLink.objects.filter(
                         isd_as=isdas, core=appliance_name
                     )
-                    assignments.update(core=new_appliance_name)
+                    links.update(core=new_appliance_name)
                     
                     messages.success(request, f'Appliance renamed from "{appliance_name}" to "{new_appliance_name}".')
             else:
@@ -186,29 +186,29 @@ def edit_appliance_in_isdas(request, pk, appliance_name):
 
 
 def remove_appliance_from_isdas(request, pk, appliance_name):
-    """Remove an appliance from an ISD-AS and all associated SCION link assignments"""
+    """Remove an appliance from an ISD-AS and all associated SCION links"""
     isdas = get_object_or_404(models.ISDAS, pk=pk)
     
     appliances = isdas.appliances or []
     if appliance_name in appliances:
-        # Check how many SCION link assignments will be deleted
-        assignments_to_delete = models.SCIONLink.objects.filter(
+        # Check how many SCION links will be deleted
+        links_to_delete = models.SCIONLink.objects.filter(
             isd_as=isdas, core=appliance_name
         )
-        assignments_count = assignments_to_delete.count()
+        links_count = links_to_delete.count()
         
         # Remove the appliance
         appliances.remove(appliance_name)
         isdas.appliances = appliances
         isdas.save()
         
-        # Delete all associated SCION link assignments
-        if assignments_count > 0:
-            assignments_to_delete.delete()
+        # Delete all associated SCION links
+        if links_count > 0:
+            links_to_delete.delete()
             messages.warning(
                 request, 
                 f'Appliance "{appliance_name}" removed successfully. '
-                f'{assignments_count} SCION link assignment(s) were also deleted.'
+                f'{links_count} SCION link(s) were also deleted.'
             )
         else:
             messages.success(request, f'Appliance "{appliance_name}" removed successfully.')

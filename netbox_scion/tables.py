@@ -37,16 +37,16 @@ class ISDATable(NetBoxTable):
         orderable=False,
         empty_values=()
     )
-    link_assignments_count = tables.Column(
-        verbose_name='Link Assignments',
+    links_count = tables.Column(
+        verbose_name='Links',
         orderable=False,
         empty_values=()
     )
 
     class Meta(NetBoxTable.Meta):
         model = ISDAS
-        fields = ('pk', 'id', 'isd_as', 'organization', 'description', 'appliances', 'link_assignments_count')
-        default_columns = ('isd_as', 'organization', 'description', 'appliances', 'link_assignments_count')
+        fields = ('pk', 'id', 'isd_as', 'organization', 'description', 'appliances', 'links_count')
+        default_columns = ('isd_as', 'organization', 'description', 'appliances', 'links_count')
 
     def render_appliances(self, record):
         return len(record.appliances) if record.appliances else 0
@@ -57,8 +57,8 @@ class ISDATable(NetBoxTable):
             return format_html('<a href="{}">{}</a>', value.get_absolute_url(), value.short_name)
         return '—'
 
-    def render_link_assignments_count(self, record):
-        return record.link_assignments.count()
+    def render_links_count(self, record):
+        return record.links.count()
 
 
 class SCIONLinkTable(NetBoxTable):

@@ -10,7 +10,7 @@ A comprehensive NetBox plugin for managing SCION (Scalability, Control, and Isol
 
 - **Organizations:** Manage SCION operators with metadata and descriptions
 - **ISD-ASes:** Track Isolation Domain and Autonomous System identifiers with appliances (CORE/EDGE)
-- **Link Assignments:** Interface management with customer information and Zendesk integration
+- **SCION Links:** Interface management with customer information and Zendesk integration
 - **REST API:** Full CRUD operations with filtering and pagination
 - **Export:** CSV and Excel export capabilities
 - **Advanced Filtering:** Search, dropdown filters, and tag-based filtering on all list pages
@@ -92,7 +92,7 @@ The plugin provides a full REST API with CRUD operations, filtering, and paginat
 The plugin adds a "SCION" section to the NetBox sidebar with:
 - Organizations
 - ISD-ASes
-- SCION Link Assignments
+- SCION Links
 
 ## Troubleshooting
 

@@ -31,7 +31,7 @@ urlpatterns = (
     path('isd-ases/<int:pk>/edit-appliance/<str:appliance_name>/', views.edit_appliance_in_isdas, name='edit_appliance'),
     path('isd-ases/<int:pk>/remove-appliance/<str:appliance_name>/', views.remove_appliance_from_isdas, name='remove_appliance'),
 
-    # SCION Link Assignment URLs
+    # SCION Link URLs
     path('links/', views.SCIONLinkListView.as_view(), name='scionlink_list'),
     path('links/add/', views.SCIONLinkEditView.as_view(), name='scionlink_add'),
     path('links/delete/', views.SCIONLinkBulkDeleteView.as_view(), name='scionlink_bulk_delete'),

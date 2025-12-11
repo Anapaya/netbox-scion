@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "netbox_scion"
 version = "1.4"
-description = "NetBox plugin for managing SCION Links Assignment"
+description = "NetBox plugin for managing SCION Links"
 readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "Apache-2.0" }

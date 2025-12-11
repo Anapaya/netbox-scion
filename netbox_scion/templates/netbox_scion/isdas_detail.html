@@ -85,7 +85,7 @@
         <div class="card">
             <h5 class="card-header">
                 <a href="{% url 'plugins:netbox_scion:scionlink_list' %}?isd_as={{ object.pk }}" class="text-decoration-none text-primary">
-                    SCION Link Assignments
+                    SCION Links
                 </a>
                 <div class="card-actions">
                     <a href="{% url 'plugins:netbox_scion:scionlink_add' %}?isd_as={{ object.pk }}" class="btn btn-primary btn-sm">
@@ -94,7 +94,7 @@
                 </div>
             </h5>
             <div class="card-body">
-                {% if object.link_assignments.exists %}
+                {% if object.links.exists %}
                 <table class="table table-hover">
                     <tr>
                         <th>Interface</th>
@@ -105,43 +105,43 @@
                         <th>Peer</th>
                         <th>Ticket</th>
                     </tr>
-                    {% for assignment in object.link_assignments.all %}
+                    {% for link in object.links.all %}
                     <tr>
-                        <td><a href="{% url 'plugins:netbox_scion:scionlink' assignment.pk %}">{{ assignment.interface_id }}</a></td>
-                        <td>{{ assignment.core }}</td>
+                        <td><a href="{% url 'plugins:netbox_scion:scionlink' link.pk %}">{{ link.interface_id }}</a></td>
+                        <td>{{ link.core }}</td>
                         <td>
-                            {% if assignment.relationship == 'CORE' %}
+                            {% if link.relationship == 'CORE' %}
                                 <span class="badge" style="background-color:#4f46e5;color:#fff;font-weight:500;">Core</span>
-                            {% elif assignment.relationship == 'CHILD' %}
+                            {% elif link.relationship == 'CHILD' %}
                                 <span class="badge" style="background-color:#14b8a6;color:#fff;font-weight:500;">Child</span>
-                            {% elif assignment.relationship == 'PARENT' %}
+                            {% elif link.relationship == 'PARENT' %}
                                 <span class="badge" style="background-color:#3b82f6;color:#fff;font-weight:500;">Parent</span>
                             {% else %}
-                                {{ assignment.get_relationship_display }}
+                                {{ link.get_relationship_display }}
                             {% endif %}
                         </td>
                         <td>
-                            {% if assignment.status %}
-                                {% if assignment.status == 'ACTIVE' %}
+                            {% if link.status %}
+                                {% if link.status == 'ACTIVE' %}
                                     <span class="badge" style="background-color:#28a745;color:#fff;font-weight:500;">Active</span>
-                                {% elif assignment.status == 'RESERVED' %}
+                                {% elif link.status == 'RESERVED' %}
                                     <span class="badge" style="background-color:#ffc107;color:#000;font-weight:500;">Reserved</span>
-                                {% elif assignment.status == 'PLANNED' %}
+                                {% elif link.status == 'PLANNED' %}
                                     <span class="badge" style="background-color:#6c757d;color:#fff;font-weight:500;">Planned</span>
                                 {% else %}
-                                    <span class="badge badge-secondary">{{ assignment.status }}</span>
+                                    <span class="badge badge-secondary">{{ link.status }}</span>
                                 {% endif %}
                             {% endif %}
                         </td>
-                        <td>{{ assignment.peer_name }}</td>
-                        <td>{{ assignment.peer }}</td>
+                        <td>{{ link.peer_name }}</td>
+                        <td>{{ link.peer }}</td>
                         <td>
-                            {% if assignment.ticket %}
-                                {% with url=assignment.get_ticket_url %}
+                            {% if link.ticket %}
+                                {% with url=link.get_ticket_url %}
                                     {% if url %}
-                                        <a href="{{ url }}" target="_blank" rel="noopener noreferrer">{{ assignment.ticket }}</a>
+                                        <a href="{{ url }}" target="_blank" rel="noopener noreferrer">{{ link.ticket }}</a>
                                     {% else %}
-                                        {{ assignment.ticket }}
+                                        {{ link.ticket }}
                                     {% endif %}
                                 {% endwith %}
                             {% else %}
@@ -162,20 +162,20 @@
 <script>
 async function confirmApplianceDelete(applianceName, isdasPk) {
     try {
-        // Count how many SCION link assignments would be affected
+        // Count how many SCION links would be affected
         const response = await fetch(`/api/plugins/scion/links/?isd_as_id=${isdasPk}&core=${encodeURIComponent(applianceName)}`);
         const data = await response.json();
-        const assignmentCount = data.count || 0;
+        const linkCount = data.count || 0;
         
         let message = `Are you sure you want to remove appliance "${applianceName}"?`;
-        if (assignmentCount > 0) {
-            message += `\n\nThis will also delete ${assignmentCount} SCION link assignment(s) that use this appliance.`;
+        if (linkCount > 0) {
+            message += `\n\nThis will also delete ${linkCount} SCION link(s) that use this appliance.`;
         }
         
         return confirm(message);
     } catch (error) {
         // Fallback message if API call fails
-        return confirm(`Are you sure you want to remove appliance "${applianceName}"?\n\nThis may also delete associated SCION link assignments.`);
+        return confirm(`Are you sure you want to remove appliance "${applianceName}"?\n\nThis may also delete associated SCION links.`);
     }
 }
 </script>

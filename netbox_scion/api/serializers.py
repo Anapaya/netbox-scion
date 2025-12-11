@@ -31,13 +31,13 @@ class ISDASSerializer(NetBoxModelSerializer):
         queryset=Organization.objects.all()
     )
     organization_display = serializers.CharField(source='organization.display', read_only=True)
-    link_assignments_count = serializers.IntegerField(read_only=True)
+    links_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = ISDAS
         fields = (
             'id', 'display', 'isd_as', 'description', 'organization', 'organization_display',
-            'appliances', 'comments', 'link_assignments_count', 'created', 'last_updated'
+            'appliances', 'comments', 'links_count', 'created', 'last_updated'
         )
 
 

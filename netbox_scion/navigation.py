@@ -34,7 +34,7 @@ _menu_items = (
     ),
     PluginMenuItem(
         link='plugins:netbox_scion:scionlink_list',
-        link_text='SCION Link Assignments',
+        link_text='SCION Links',
         buttons=(scionlink_button,)
     ),
 )

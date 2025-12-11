@@ -198,7 +198,7 @@ For complete API documentation including authentication, request/response exampl
 **➡️ [API.md](../API.md)** - Comprehensive REST API Documentation
 
 The API.md file includes:
-- Complete endpoint reference for Organizations, ISD-ASes, and Link Assignments
+- Complete endpoint reference for Organizations, ISD-ASes, and SCION Links
 - Authentication methods (Token and Session)
 - Full request/response examples with curl
 - Filtering and search parameters

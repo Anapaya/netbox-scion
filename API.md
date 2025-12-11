@@ -228,7 +228,7 @@ curl -X GET \
   -H "Content-Type: application/json"
 ```
 
-Fields returned now include `comments`, `organization_display`, and `link_assignments_count`.
+Fields returned now include `comments`, `organization_display`, and `links_count`.
 
 **Response:**
 
@@ -253,7 +253,7 @@ Fields returned now include `comments`, `organization_display`, and `link_assign
       "appliances": ["border1.acme.com", "border2.acme.com"],
       "appliances_display": "border1.acme.com, border2.acme.com",
       "comments": "Primary production AS",
-      "link_assignments_count": 2,
+      "links_count": 2,
       "created": "2025-09-09T10:30:00.000000Z",
       "last_updated": "2025-09-09T10:30:00.000000Z",
       "custom_field_data": {}
@@ -273,7 +273,7 @@ Fields returned now include `comments`, `organization_display`, and `link_assign
       "appliances": ["router1.example.com"],
       "appliances_display": "router1.example.com",
       "comments": "",
-      "link_assignments_count": 0,
+      "links_count": 0,
       "created": "2025-09-09T11:00:00.000000Z",
       "last_updated": "2025-09-09T11:00:00.000000Z",
       "custom_field_data": {}
@@ -311,7 +311,7 @@ curl -X GET \
   "appliances": ["border1.acme.com", "border2.acme.com", "transit1.acme.com"],
   "appliances_display": "border1.acme.com, border2.acme.com, transit1.acme.com",
   "comments": "Primary transit node set",
-  "link_assignments_count": 2,
+  "links_count": 2,
   "created": "2025-09-09T10:30:00.000000Z",
   "last_updated": "2025-09-09T10:30:00.000000Z",
   "custom_field_data": {}
@@ -366,7 +366,7 @@ You may optionally include `comments` when creating.
   "appliances": ["core1.newnet.com", "core2.newnet.com"],
   "appliances_display": "core1.newnet.com, core2.newnet.com",
   "comments": "Staging AS for rollout",
-  "link_assignments_count": 0,
+  "links_count": 0,
   "created": "2025-09-09T12:30:00.000000Z",
   "last_updated": "2025-09-09T12:30:00.000000Z",
   "custom_field_data": {}
@@ -402,17 +402,17 @@ curl -X DELETE \
 
 ---
 
-## 🔗 SCION Link Assignments API
+## 🔗 SCION Links API
 
-Manage SCION link interface assignments between appliances and peers.
+Manage SCION link interfaces between appliances and peers.
 
-### Base Endpoint (Link Assignments)
+### Base Endpoint (SCION Links)
 
 ```text
 /api/plugins/scion/links/
 ```
 
-### List Link Assignments
+### List SCION Links
 
 **GET** `/api/plugins/scion/links/`
 
@@ -482,7 +482,7 @@ Fields returned now include `status`, `local_underlay`, `peer_underlay`, `ticket
 }
 ```
 
-### Get Link Assignment
+### Get SCION Link
 
 **GET** `/api/plugins/scion/links/{id}/`
 
@@ -522,7 +522,7 @@ curl -X GET \
 }
 ```
 
-### Create Link Assignment
+### Create SCION Link
 
 **POST** `/api/plugins/scion/links/`
 
@@ -595,7 +595,7 @@ You may optionally include `status` (defaults to ACTIVE), `local_underlay`, `pee
 }
 ```
 
-### Update Link Assignment
+### Update SCION Link
 
 **PATCH** `/api/plugins/scion/links/{id}/`
 
@@ -612,7 +612,7 @@ curl -X PATCH \
   }'
 ```
 
-### Delete Link Assignment
+### Delete SCION Link
 
 **DELETE** `/api/plugins/scion/links/{id}/`
 
@@ -663,7 +663,7 @@ curl "https://netbox.example.com/api/plugins/scion/isd-ases/?organization__short
 curl "https://netbox.example.com/api/plugins/scion/isd-ases/?q=ff00"
 ```
 
-#### Link Assignments
+#### SCION Links
 
 - `isd_as`: Filter by ISD-AS (internal ID)
 - `isd_as__isd_as`: Filter by ISD-AS identifier string
@@ -712,7 +712,7 @@ curl "https://netbox.example.com/api/plugins/scion/organizations/?format=csv" \
 curl "https://netbox.example.com/api/plugins/scion/isd-ases/?format=csv" \
   -H "Authorization: Token your-api-token"
 
-# Export link assignments to CSV
+# Export SCION links to CSV
 curl "https://netbox.example.com/api/plugins/scion/links/?format=csv" \
   -H "Authorization: Token your-api-token"
 ```
@@ -759,7 +759,7 @@ curl "https://netbox.example.com/api/plugins/scion/links/?format=csv" \
 - `appliances`: Optional JSON array of strings
 - `comments`: Optional free-form text
 
-#### Link Assignment
+#### SCION Link
 
 - `isd_as`: Required, must reference existing ISD-AS (primary key integer)
 - `core`: Required, appliance name (string)
@@ -830,7 +830,7 @@ if response.status_code == 201:
         isdas = isdas_response.json()
         print(f"Created ISD-AS: {isdas['display']}")
         
-    # Create a link assignment (note: customer_id removed, status optional)
+    # Create a SCION link (note: customer_id removed, status optional)
         link_data = {
             "isd_as": isdas["id"],
             "core": "test1.example.com",
@@ -851,7 +851,7 @@ if response.status_code == 201:
         
         if link_response.status_code == 201:
             link = link_response.json()
-            print(f"Created link assignment: {link['display']}")
+            print(f"Created SCION link: {link['display']}")
 
 # List all organizations
 response = requests.get(f"{BASE_URL}/organizations/", headers=HEADERS)
@@ -871,11 +871,11 @@ if response.status_code == 200:
 - **Unique Constraints**
   - Organization `short_name` must be unique globally
   - ISD-AS `isd_as` identifier must be unique globally
-  - Link Assignment `interface_id` must be unique per ISD-AS
-  - Link Assignment `peer` (when non-empty) must be unique per ISD-AS
+  - SCION Link `interface_id` must be unique per ISD-AS
+  - SCION Link `peer` (when non-empty) must be unique per ISD-AS
 - **Cascading Deletes**
   - Deleting an organization deletes all associated ISD-ASes
-  - Deleting an ISD-AS deletes all associated link assignments
+  - Deleting an ISD-AS deletes all associated SCION links
 - **Peer Field Format (Recommended)**
   - `{isd}-{as}#{interface_number}` e.g. `1-ff00:0:110#1`, `12-332#2`
 - **Ticket Normalization**

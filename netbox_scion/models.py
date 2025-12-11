@@ -116,7 +116,7 @@ class ISDAS(NetBoxModel):
 
 class SCIONLink(NetBoxModel):
     """
-    Assignment of a SCION link interface to a customer.
+    SCION link interface configuration.
     """
     
     # Relationship choices
@@ -144,14 +144,14 @@ class SCIONLink(NetBoxModel):
     isd_as = models.ForeignKey(
         ISDAS,
         on_delete=models.CASCADE,
-        related_name='link_assignments',
+        related_name='links',
         verbose_name="ISD-AS",
         help_text="ISD-AS that owns this interface"
     )
     core = models.CharField(
         max_length=255,
         verbose_name="Appliance",
-        help_text="Appliance for this assignment"
+        help_text="Appliance for this link"
     )
     interface_id = models.PositiveIntegerField(
         verbose_name="Interface ID",
@@ -167,7 +167,7 @@ class SCIONLink(NetBoxModel):
         max_length=16,
         choices=STATUS_CHOICES,
         default=STATUS_ACTIVE,
-        help_text="Operational status of this link assignment"
+        help_text="Operational status of this link"
     )
     peer_name = models.CharField(
         max_length=100,
@@ -205,8 +205,8 @@ class SCIONLink(NetBoxModel):
     )
 
     class Meta:
-        verbose_name = "SCION Link Assignment"
-        verbose_name_plural = "SCION Link Assignments"
+        verbose_name = "SCION Link"
+        verbose_name_plural = "SCION Links"
         ordering = ['isd_as', 'interface_id']
         constraints = [
             models.UniqueConstraint(

@@ -9,11 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Complete NetBox SCION plugin for managing SCION network infrastructure
-- Three core models: Organizations, ISD-ASes, and SCION Link Assignments
+- Three core models: Organizations, ISD-ASes, and SCION Links
 - Organization management with ISD-AS relationships and auto-deletion of child ISD-ASes
 - ISD-AS management with appliance tracking
-- SCION Link Assignment management with peer relationships
-- Status field for SCION Link Assignments (Reserved, Active, Planned) with color-coded badges
+- SCION Link management with peer relationships
+- Status field for SCION Links (Reserved, Active, Planned) with color-coded badges
 - Local and peer underlay fields with IP:port validation
 - Peer field with unique constraint per ISD-AS and format validation
 - Comments fields for all main models
@@ -28,4 +28,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clickable section headers for improved navigation between detail pages
 - Enhanced table rendering with proper null value handling
 - Form validation with reliable JavaScript initialization using polling-based ready checks
-- Auto-select functionality for appliance field when editing SCION Link Assignments
+- Auto-select functionality for appliance field when editing SCION Links

@@ -32,8 +32,8 @@ class OrganizationViewSet(NetBoxModelViewSet):
 
 
 class ISDASViewSet(NetBoxModelViewSet):
-    queryset = models.ISDAS.objects.select_related('organization').prefetch_related('link_assignments').annotate(
-        link_assignments_count=Count('link_assignments')
+    queryset = models.ISDAS.objects.select_related('organization').prefetch_related('links').annotate(
+        links_count=Count('links')
     )
     serializer_class = ISDASSerializer
     filterset_class = filtersets.ISDAFilterSet

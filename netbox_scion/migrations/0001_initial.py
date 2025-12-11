@@ -107,7 +107,7 @@ class Migration(migrations.Migration):
                 ('core', models.CharField(
                     max_length=255,
                     verbose_name="Appliance",
-                    help_text="Appliance for this assignment"
+                    help_text="Appliance for this link"
                 )),
                 ('relationship', models.CharField(
                     max_length=20,
@@ -127,7 +127,7 @@ class Migration(migrations.Migration):
                         ('PLANNED', 'Planned')
                     ],
                     default='ACTIVE',
-                    help_text="Operational status of this link assignment"
+                    help_text="Operational status of this link"
                 )),
                 ('peer_name', models.CharField(
                     max_length=100,
@@ -161,7 +161,7 @@ class Migration(migrations.Migration):
                 )),
                 ('isd_as', models.ForeignKey(
                     on_delete=models.CASCADE,
-                    related_name='link_assignments',
+                    related_name='links',
                     to='netbox_scion.isdas',
                     verbose_name="ISD-AS",
                     help_text="ISD-AS that owns this interface"
