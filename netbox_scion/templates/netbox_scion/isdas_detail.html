@@ -84,11 +84,11 @@
     <div class="col col-md-6">
         <div class="card">
             <h5 class="card-header">
-                <a href="{% url 'plugins:netbox_scion:scionlinkassignment_list' %}?isd_as={{ object.pk }}" class="text-decoration-none text-primary">
+                <a href="{% url 'plugins:netbox_scion:scionlink_list' %}?isd_as={{ object.pk }}" class="text-decoration-none text-primary">
                     SCION Link Assignments
                 </a>
                 <div class="card-actions">
-                    <a href="{% url 'plugins:netbox_scion:scionlinkassignment_add' %}?isd_as={{ object.pk }}" class="btn btn-primary btn-sm">
+                    <a href="{% url 'plugins:netbox_scion:scionlink_add' %}?isd_as={{ object.pk }}" class="btn btn-primary btn-sm">
                         <i class="mdi mdi-plus-thick"></i> Add
                     </a>
                 </div>
@@ -107,7 +107,7 @@
                     </tr>
                     {% for assignment in object.link_assignments.all %}
                     <tr>
-                        <td><a href="{% url 'plugins:netbox_scion:scionlinkassignment' assignment.pk %}">{{ assignment.interface_id }}</a></td>
+                        <td><a href="{% url 'plugins:netbox_scion:scionlink' assignment.pk %}">{{ assignment.interface_id }}</a></td>
                         <td>{{ assignment.core }}</td>
                         <td>
                             {% if assignment.relationship == 'CORE' %}

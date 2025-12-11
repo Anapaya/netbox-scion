@@ -228,7 +228,7 @@ class SCIONLinkAssignment(NetBoxModel):
         return f"{self.isd_as} - Interface {self.interface_id}"
 
     def get_absolute_url(self):
-        return reverse('plugins:netbox_scion:scionlinkassignment', args=[self.pk])
+        return reverse('plugins:netbox_scion:scionlink', args=[self.pk])
 
     def get_ticket_url(self):
         """Best-effort URL normalization of the stored ticket value.

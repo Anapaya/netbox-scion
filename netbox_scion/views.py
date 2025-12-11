@@ -218,34 +218,34 @@ def remove_appliance_from_isdas(request, pk, appliance_name):
     return redirect('plugins:netbox_scion:isdas', pk=pk)
 
 
-class SCIONLinkAssignmentView(generic.ObjectView):
+class SCIONLinkView(generic.ObjectView):
     queryset = models.SCIONLinkAssignment.objects.select_related('isd_as', 'isd_as__organization')
-    template_name = 'netbox_scion/scionlinkassignment_detail.html'
+    template_name = 'netbox_scion/scionlink_detail.html'
 
 
-class SCIONLinkAssignmentListView(generic.ObjectListView):
+class SCIONLinkListView(generic.ObjectListView):
     queryset = models.SCIONLinkAssignment.objects.select_related('isd_as', 'isd_as__organization')
     table = tables.SCIONLinkAssignmentTable
     filterset = filtersets.SCIONLinkAssignmentFilterSet
     filterset_form = forms.SCIONLinkAssignmentFilterForm
 
 
-class SCIONLinkAssignmentEditView(generic.ObjectEditView):
+class SCIONLinkEditView(generic.ObjectEditView):
     queryset = models.SCIONLinkAssignment.objects.all()
     form = forms.SCIONLinkAssignmentForm
-    template_name = 'netbox_scion/scionlinkassignment_edit.html'
+    template_name = 'netbox_scion/scionlink_edit.html'
 
 
-class SCIONLinkAssignmentDeleteView(generic.ObjectDeleteView):
+class SCIONLinkDeleteView(generic.ObjectDeleteView):
     queryset = models.SCIONLinkAssignment.objects.all()
 
 
-class SCIONLinkAssignmentBulkDeleteView(generic.BulkDeleteView):
+class SCIONLinkBulkDeleteView(generic.BulkDeleteView):
     queryset = models.SCIONLinkAssignment.objects.all()
     table = tables.SCIONLinkAssignmentTable
 
 
-class SCIONLinkAssignmentChangeLogView(generic.ObjectChangeLogView):
+class SCIONLinkChangeLogView(generic.ObjectChangeLogView):
     queryset = models.SCIONLinkAssignment.objects.all()
     model = models.SCIONLinkAssignment
-    base_template = 'netbox_scion/scionlinkassignment_detail.html'
+    base_template = 'netbox_scion/scionlink_detail.html'

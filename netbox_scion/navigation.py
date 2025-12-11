@@ -15,8 +15,8 @@ isdas_button = PluginMenuButton(
     icon_class='mdi mdi-plus-thick',
 )
 
-scionlinkassignment_button = PluginMenuButton(
-    link='plugins:netbox_scion:scionlinkassignment_add',
+scionlink_button = PluginMenuButton(
+    link='plugins:netbox_scion:scionlink_add',
     title='Add',
     icon_class='mdi mdi-plus-thick',
 )
@@ -33,9 +33,9 @@ _menu_items = (
         buttons=(isdas_button,)
     ),
     PluginMenuItem(
-        link='plugins:netbox_scion:scionlinkassignment_list',
+        link='plugins:netbox_scion:scionlink_list',
         link_text='SCION Link Assignments',
-        buttons=(scionlinkassignment_button,)
+        buttons=(scionlink_button,)
     ),
 )
 
