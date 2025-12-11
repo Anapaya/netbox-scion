@@ -1,7 +1,7 @@
 import django_filters
 from django.db.models import Q
 from netbox.filtersets import NetBoxModelFilterSet
-from .models import Organization, ISDAS, SCIONLinkAssignment
+from .models import Organization, ISDAS, SCIONLink
 
 
 class OrganizationFilterSet(NetBoxModelFilterSet):
@@ -49,14 +49,14 @@ class ISDAFilterSet(NetBoxModelFilterSet):
         return queryset.filter(qs_filter)
 
 
-class SCIONLinkAssignmentFilterSet(NetBoxModelFilterSet):
+class SCIONLinkFilterSet(NetBoxModelFilterSet):
     q = django_filters.CharFilter(
         method='search',
         label='Search',
     )
     
     class Meta:
-        model = SCIONLinkAssignment
+        model = SCIONLink
         fields = ['id', 'isd_as', 'core', 'relationship', 'status', 'peer_name', 'peer']
 
     def search(self, queryset, name, value):

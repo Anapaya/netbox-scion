@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from netbox.api.serializers import NetBoxModelSerializer, WritableNestedSerializer
-from ..models import Organization, ISDAS, SCIONLinkAssignment
+from ..models import Organization, ISDAS, SCIONLink
 
 
 class NestedOrganizationSerializer(WritableNestedSerializer):
@@ -41,13 +41,13 @@ class ISDASSerializer(NetBoxModelSerializer):
         )
 
 
-class NestedSCIONLinkAssignmentSerializer(WritableNestedSerializer):
+class NestedSCIONLinkSerializer(WritableNestedSerializer):
     class Meta:
-        model = SCIONLinkAssignment
+        model = SCIONLink
         fields = ('id', 'display')
 
 
-class SCIONLinkAssignmentSerializer(NetBoxModelSerializer):
+class SCIONLinkSerializer(NetBoxModelSerializer):
     isd_as = serializers.PrimaryKeyRelatedField(
         queryset=ISDAS.objects.all()
     )
@@ -56,7 +56,7 @@ class SCIONLinkAssignmentSerializer(NetBoxModelSerializer):
     ticket_url = serializers.CharField(source='get_ticket_url', read_only=True)
 
     class Meta:
-        model = SCIONLinkAssignment
+        model = SCIONLink
         fields = (
             'id', 'display', 'isd_as', 'isd_as_display', 'core', 'interface_id',
             'relationship', 'status', 'peer_name', 'peer', 'local_underlay', 'peer_underlay', 'ticket', 'ticket_url',

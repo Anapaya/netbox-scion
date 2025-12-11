@@ -1,7 +1,7 @@
 import django_tables2 as tables
 from django.utils.html import format_html
 from netbox.tables import NetBoxTable
-from .models import Organization, ISDAS, SCIONLinkAssignment
+from .models import Organization, ISDAS, SCIONLink
 
 
 class OrganizationTable(NetBoxTable):
@@ -61,7 +61,7 @@ class ISDATable(NetBoxTable):
         return record.link_assignments.count()
 
 
-class SCIONLinkAssignmentTable(NetBoxTable):
+class SCIONLinkTable(NetBoxTable):
     isd_as = tables.Column(
         linkify=True
     )
@@ -91,7 +91,7 @@ class SCIONLinkAssignmentTable(NetBoxTable):
     )
 
     class Meta(NetBoxTable.Meta):
-        model = SCIONLinkAssignment
+        model = SCIONLink
         fields = ('pk', 'id', 'isd_as', 'core', 'interface_id', 'relationship', 'status', 'peer_name', 'peer', 'local_underlay', 'peer_underlay', 'ticket')
         default_columns = ('isd_as', 'core', 'interface_id', 'relationship', 'status', 'peer_name', 'peer', 'local_underlay', 'peer_underlay', 'ticket')
 

@@ -8,10 +8,10 @@ from . import forms, models, tables, filtersets
 
 class PluginHomeView(generic.ObjectListView):
     """Home view for the SCION plugin showing all main sections."""
-    queryset = models.SCIONLinkAssignment.objects.select_related('isd_as', 'isd_as__organization')
-    table = tables.SCIONLinkAssignmentTable
-    filterset = filtersets.SCIONLinkAssignmentFilterSet
-    filterset_form = forms.SCIONLinkAssignmentFilterForm
+    queryset = models.SCIONLink.objects.select_related('isd_as', 'isd_as__organization')
+    table = tables.SCIONLinkTable
+    filterset = filtersets.SCIONLinkFilterSet
+    filterset_form = forms.SCIONLinkFilterForm
     template_name = 'generic/object_list.html'
 
 
@@ -163,7 +163,7 @@ def edit_appliance_in_isdas(request, pk, appliance_name):
                     isdas.save()
                     
                     # Update all SCION link assignments that use this appliance
-                    assignments = models.SCIONLinkAssignment.objects.filter(
+                    assignments = models.SCIONLink.objects.filter(
                         isd_as=isdas, core=appliance_name
                     )
                     assignments.update(core=new_appliance_name)
@@ -192,7 +192,7 @@ def remove_appliance_from_isdas(request, pk, appliance_name):
     appliances = isdas.appliances or []
     if appliance_name in appliances:
         # Check how many SCION link assignments will be deleted
-        assignments_to_delete = models.SCIONLinkAssignment.objects.filter(
+        assignments_to_delete = models.SCIONLink.objects.filter(
             isd_as=isdas, core=appliance_name
         )
         assignments_count = assignments_to_delete.count()
@@ -219,33 +219,33 @@ def remove_appliance_from_isdas(request, pk, appliance_name):
 
 
 class SCIONLinkView(generic.ObjectView):
-    queryset = models.SCIONLinkAssignment.objects.select_related('isd_as', 'isd_as__organization')
+    queryset = models.SCIONLink.objects.select_related('isd_as', 'isd_as__organization')
     template_name = 'netbox_scion/scionlink_detail.html'
 
 
 class SCIONLinkListView(generic.ObjectListView):
-    queryset = models.SCIONLinkAssignment.objects.select_related('isd_as', 'isd_as__organization')
-    table = tables.SCIONLinkAssignmentTable
-    filterset = filtersets.SCIONLinkAssignmentFilterSet
-    filterset_form = forms.SCIONLinkAssignmentFilterForm
+    queryset = models.SCIONLink.objects.select_related('isd_as', 'isd_as__organization')
+    table = tables.SCIONLinkTable
+    filterset = filtersets.SCIONLinkFilterSet
+    filterset_form = forms.SCIONLinkFilterForm
 
 
 class SCIONLinkEditView(generic.ObjectEditView):
-    queryset = models.SCIONLinkAssignment.objects.all()
-    form = forms.SCIONLinkAssignmentForm
+    queryset = models.SCIONLink.objects.all()
+    form = forms.SCIONLinkForm
     template_name = 'netbox_scion/scionlink_edit.html'
 
 
 class SCIONLinkDeleteView(generic.ObjectDeleteView):
-    queryset = models.SCIONLinkAssignment.objects.all()
+    queryset = models.SCIONLink.objects.all()
 
 
 class SCIONLinkBulkDeleteView(generic.BulkDeleteView):
-    queryset = models.SCIONLinkAssignment.objects.all()
-    table = tables.SCIONLinkAssignmentTable
+    queryset = models.SCIONLink.objects.all()
+    table = tables.SCIONLinkTable
 
 
 class SCIONLinkChangeLogView(generic.ObjectChangeLogView):
-    queryset = models.SCIONLinkAssignment.objects.all()
-    model = models.SCIONLinkAssignment
+    queryset = models.SCIONLink.objects.all()
+    model = models.SCIONLink
     base_template = 'netbox_scion/scionlink_detail.html'

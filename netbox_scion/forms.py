@@ -1,7 +1,7 @@
 from django import forms
 from netbox.forms import NetBoxModelForm, NetBoxModelFilterSetForm
 from utilities.forms.fields import DynamicModelChoiceField, TagFilterField
-from .models import Organization, ISDAS, SCIONLinkAssignment
+from .models import Organization, ISDAS, SCIONLink
 
 
 class OrganizationForm(NetBoxModelForm):
@@ -71,7 +71,7 @@ class ApplianceManagementForm(forms.Form):
     )
 
 
-class SCIONLinkAssignmentForm(NetBoxModelForm):
+class SCIONLinkForm(NetBoxModelForm):
     core = forms.ChoiceField(
         required=True,
         help_text="Select the appliance for this assignment",
@@ -80,7 +80,7 @@ class SCIONLinkAssignmentForm(NetBoxModelForm):
     )
 
     class Meta:
-        model = SCIONLinkAssignment
+        model = SCIONLink
         fields = (
             'isd_as', 'core', 'interface_id', 'relationship', 'status', 'peer_name', 'peer',
             'local_underlay', 'peer_underlay', 'ticket', 'comments'
@@ -215,7 +215,7 @@ class ISDAFilterForm(NetBoxModelFilterSetForm):
     model = ISDAS
 
 
-class SCIONLinkAssignmentFilterForm(NetBoxModelFilterSetForm):
+class SCIONLinkFilterForm(NetBoxModelFilterSetForm):
     q = forms.CharField(required=False, label="Search")
     isd_as = DynamicModelChoiceField(
         queryset=ISDAS.objects.all(),
@@ -223,9 +223,9 @@ class SCIONLinkAssignmentFilterForm(NetBoxModelFilterSetForm):
         label='ISD-AS'
     )
     relationship = forms.MultipleChoiceField(
-        choices=SCIONLinkAssignment.RELATIONSHIP_CHOICES,
+        choices=SCIONLink.RELATIONSHIP_CHOICES,
         required=False,
     )
-    tag = TagFilterField(SCIONLinkAssignment)
+    tag = TagFilterField(SCIONLink)
 
-    model = SCIONLinkAssignment
+    model = SCIONLink

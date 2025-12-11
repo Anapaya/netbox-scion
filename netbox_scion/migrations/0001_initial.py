@@ -92,9 +92,9 @@ class Migration(migrations.Migration):
             },
         ),
         
-        # Create SCIONLinkAssignment table
+        # Create SCIONLink table
         migrations.CreateModel(
-            name='SCIONLinkAssignment',
+            name='SCIONLink',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
@@ -168,15 +168,15 @@ class Migration(migrations.Migration):
                 )),
             ],
             options={
-                'verbose_name': 'SCION Link Assignment',
-                'verbose_name_plural': 'SCION Link Assignments',
+                'verbose_name': 'SCION Link',
+                'verbose_name_plural': 'SCION Links',
                 'ordering': ['isd_as', 'interface_id'],
             },
         ),
         
         # Add unique constraint for interface_id per ISD-AS
         migrations.AddConstraint(
-            model_name='scionlinkassignment',
+            model_name='scionlink',
             constraint=models.UniqueConstraint(
                 fields=['isd_as', 'interface_id'],
                 name='unique_interface_per_isdas'
@@ -186,7 +186,7 @@ class Migration(migrations.Migration):
         # Add conditional unique constraint for peer per ISD-AS
         # Only enforces uniqueness when peer is not NULL and not empty string
         migrations.AddConstraint(
-            model_name='scionlinkassignment',
+            model_name='scionlink',
             constraint=models.UniqueConstraint(
                 fields=['isd_as', 'peer'],
                 name='unique_peer_per_isdas',

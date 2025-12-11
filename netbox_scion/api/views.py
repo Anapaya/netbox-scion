@@ -3,7 +3,7 @@ from django.db.models import Count
 from django.http import JsonResponse
 from django.views import View
 from .. import filtersets, models
-from .serializers import OrganizationSerializer, ISDASSerializer, SCIONLinkAssignmentSerializer
+from .serializers import OrganizationSerializer, ISDASSerializer, SCIONLinkSerializer
 
 
 class ISDASCoreLookupView(View):
@@ -39,7 +39,7 @@ class ISDASViewSet(NetBoxModelViewSet):
     filterset_class = filtersets.ISDAFilterSet
 
 
-class SCIONLinkAssignmentViewSet(NetBoxModelViewSet):
-    queryset = models.SCIONLinkAssignment.objects.select_related('isd_as', 'isd_as__organization')
-    serializer_class = SCIONLinkAssignmentSerializer
-    filterset_class = filtersets.SCIONLinkAssignmentFilterSet
+class SCIONLinkViewSet(NetBoxModelViewSet):
+    queryset = models.SCIONLink.objects.select_related('isd_as', 'isd_as__organization')
+    serializer_class = SCIONLinkSerializer
+    filterset_class = filtersets.SCIONLinkFilterSet

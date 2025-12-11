@@ -114,7 +114,7 @@ class ISDAS(NetBoxModel):
         return str(self.appliances)
 
 
-class SCIONLinkAssignment(NetBoxModel):
+class SCIONLink(NetBoxModel):
     """
     Assignment of a SCION link interface to a customer.
     """

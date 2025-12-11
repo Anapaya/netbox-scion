@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Organization, ISDAS, SCIONLinkAssignment
+from .models import Organization, ISDAS, SCIONLink
 
 
 @admin.register(Organization)
@@ -18,8 +18,8 @@ class ISDAAdmin(admin.ModelAdmin):
     ordering = ('isd_as',)
 
 
-@admin.register(SCIONLinkAssignment)
-class SCIONLinkAssignmentAdmin(admin.ModelAdmin):
+@admin.register(SCIONLink)
+class SCIONLinkAdmin(admin.ModelAdmin):
     list_display = ('isd_as', 'interface_id', 'peer_name', 'peer', 'status', 'ticket')
     list_filter = ('isd_as', 'relationship')
     search_fields = ('peer_name', 'peer', 'ticket', 'isd_as__isd_as')

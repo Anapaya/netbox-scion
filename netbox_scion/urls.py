@@ -38,5 +38,5 @@ urlpatterns = (
     path('links/<int:pk>/', views.SCIONLinkView.as_view(), name='scionlink'),
     path('links/<int:pk>/edit/', views.SCIONLinkEditView.as_view(), name='scionlink_edit'),
     path('links/<int:pk>/delete/', views.SCIONLinkDeleteView.as_view(), name='scionlink_delete'),
-    path('links/<int:pk>/changelog/', views.SCIONLinkChangeLogView.as_view(), name='scionlink_changelog', kwargs={'model': models.SCIONLinkAssignment}),
+    path('links/<int:pk>/changelog/', views.SCIONLinkChangeLogView.as_view(), name='scionlink_changelog', kwargs={'model': models.SCIONLink}),
 )

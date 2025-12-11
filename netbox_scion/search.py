@@ -1,5 +1,5 @@
 from netbox.search import SearchIndex, register_search
-from .models import Organization, ISDAS, SCIONLinkAssignment
+from .models import Organization, ISDAS, SCIONLink
 
 
 @register_search
@@ -22,8 +22,8 @@ class ISDAIndex(SearchIndex):
 
 
 @register_search
-class SCIONLinkAssignmentIndex(SearchIndex):
-    model = SCIONLinkAssignment
+class SCIONLinkIndex(SearchIndex):
+    model = SCIONLink
     fields = (
         ('core', 100),
         ('peer_name', 150),
