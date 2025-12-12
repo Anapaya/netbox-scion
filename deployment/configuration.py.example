@@ -1,0 +1,14 @@
+# Add this to your NetBox plugins.py file or configuration/plugins.py
+
+# Plugin Configuration
+PLUGINS = [
+    'netbox_scion',
+    # Your other plugins here...
+]
+
+# Optional: Plugin-specific settings
+PLUGINS_CONFIG = {
+    'netbox_scion': {
+        # No additional configuration required
+    }
+}

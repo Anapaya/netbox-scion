@@ -1,0 +1,15 @@
+# Alternative Dockerfile using pip directly (if uv is not available)
+FROM netboxcommunity/netbox:latest
+
+# Switch to root to install pip
+USER root
+RUN apt-get update && apt-get install -y python3-pip && rm -rf /var/lib/apt/lists/*
+
+# Copy plugin requirements
+COPY plugin_requirements.txt /opt/netbox/
+
+# Install plugins using pip in the virtual environment
+RUN /opt/netbox/venv/bin/pip install -r /opt/netbox/plugin_requirements.txt
+
+# Switch back to netbox user
+USER 999

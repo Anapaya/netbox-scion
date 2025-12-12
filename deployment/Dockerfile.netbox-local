@@ -1,0 +1,9 @@
+# Custom NetBox Dockerfile with SCION Plugin (Local Wheel)
+# Development Dockerfile for local wheel file testing
+FROM netboxcommunity/netbox:latest
+
+# Copy local wheel file
+COPY plugins/*.whl /tmp/
+
+# Install local plugin wheel
+RUN /usr/local/bin/uv pip install /tmp/*.whl
