@@ -123,11 +123,13 @@ class SCIONLink(NetBoxModel):
     RELATIONSHIP_PARENT = 'PARENT'
     RELATIONSHIP_CHILD = 'CHILD'
     RELATIONSHIP_CORE = 'CORE'
+    RELATIONSHIP_PEER = 'PEER'
     
     RELATIONSHIP_CHOICES = [
         (RELATIONSHIP_PARENT, 'PARENT'),
         (RELATIONSHIP_CHILD, 'CHILD'),
         (RELATIONSHIP_CORE, 'CORE'),
+        (RELATIONSHIP_PEER, 'PEER'),
     ]
 
     # Status choices
@@ -216,7 +218,7 @@ class SCIONLink(NetBoxModel):
             models.UniqueConstraint(
                 fields=['isd_as', 'peer'],
                 name='unique_peer_per_isdas',
-                condition=models.Q(peer__isnull=False) & ~models.Q(peer='')
+                condition=models.Q(peer__contains='#')
             )
         ]
 

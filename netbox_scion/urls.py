@@ -17,6 +17,7 @@ urlpatterns = (
     path('organizations/<int:pk>/edit/', views.OrganizationEditView.as_view(), name='organization_edit'),
     path('organizations/<int:pk>/delete/', views.OrganizationDeleteView.as_view(), name='organization_delete'),
     path('organizations/<int:pk>/changelog/', views.OrganizationChangeLogView.as_view(), name='organization_changelog', kwargs={'model': models.Organization}),
+    path('organizations/<int:pk>/export/', views.export_organization, name='organization_export'),
 
     # ISD-AS URLs
     path('isd-ases/', views.ISDAListView.as_view(), name='isdas_list'),

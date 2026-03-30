@@ -13,7 +13,7 @@
                         <td><a href="{% url 'plugins:netbox_scion:isdas' object.isd_as.pk %}">{{ object.isd_as }}</a></td>
                     </tr>
                     <tr>
-                        <th scope="row">Core Node</th>
+                        <th scope="row">Appliance</th>
                         <td>{{ object.core }}</td>
                     </tr>
                     <tr>
@@ -24,11 +24,13 @@
                         <th scope="row">Relationship</th>
                         <td>
                             {% if object.relationship == 'CORE' %}
-                                <span class="badge" style="background-color:#4f46e5;color:#fff;font-weight:500;">Core</span>
+                                <span class="badge" style="background-color:#4f46e5;color:#fff;font-weight:500;">CORE</span>
                             {% elif object.relationship == 'CHILD' %}
-                                <span class="badge" style="background-color:#14b8a6;color:#fff;font-weight:500;">Child</span>
+                                <span class="badge" style="background-color:#14b8a6;color:#fff;font-weight:500;">CHILD</span>
                             {% elif object.relationship == 'PARENT' %}
-                                <span class="badge" style="background-color:#3b82f6;color:#fff;font-weight:500;">Parent</span>
+                                <span class="badge" style="background-color:#3b82f6;color:#fff;font-weight:500;">PARENT</span>
+                            {% elif object.relationship == 'PEER' %}
+                                <span class="badge" style="background-color:#f97316;color:#fff;font-weight:500;">PEER</span>
                             {% else %}
                                 {{ object.get_relationship_display }}
                             {% endif %}

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 # Optional: minimal dynamic metadata defers to setup.py for now.
 [project]
 name = "netbox_scion"
-version = "1.4"
+version = "1.4.1"
 description = "NetBox plugin for managing SCION Links"
 readme = "README.md"
 requires-python = ">=3.8"
