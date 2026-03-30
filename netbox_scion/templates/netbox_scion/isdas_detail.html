@@ -104,6 +104,7 @@
                         <th>Peer Name</th>
                         <th>Peer</th>
                         <th>Ticket</th>
+                        <th>Actions</th>
                     </tr>
                     {% for link in object.links.all %}
                     <tr>
@@ -111,11 +112,13 @@
                         <td>{{ link.core }}</td>
                         <td>
                             {% if link.relationship == 'CORE' %}
-                                <span class="badge" style="background-color:#4f46e5;color:#fff;font-weight:500;">Core</span>
+                                <span class="badge" style="background-color:#4f46e5;color:#fff;font-weight:500;">CORE</span>
                             {% elif link.relationship == 'CHILD' %}
-                                <span class="badge" style="background-color:#14b8a6;color:#fff;font-weight:500;">Child</span>
+                                <span class="badge" style="background-color:#14b8a6;color:#fff;font-weight:500;">CHILD</span>
                             {% elif link.relationship == 'PARENT' %}
-                                <span class="badge" style="background-color:#3b82f6;color:#fff;font-weight:500;">Parent</span>
+                                <span class="badge" style="background-color:#3b82f6;color:#fff;font-weight:500;">PARENT</span>
+                            {% elif link.relationship == 'PEER' %}
+                                <span class="badge" style="background-color:#f97316;color:#fff;font-weight:500;">PEER</span>
                             {% else %}
                                 {{ link.get_relationship_display }}
                             {% endif %}
@@ -147,6 +150,11 @@
                             {% else %}
                                 <span class="text-muted">—</span>
                             {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'plugins:netbox_scion:scionlink_edit' link.pk %}" class="btn btn-outline-primary btn-sm">
+                                <i class="mdi mdi-pencil"></i>
+                            </a>
                         </td>
                     </tr>
                     {% endfor %}

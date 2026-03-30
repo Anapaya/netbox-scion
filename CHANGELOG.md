@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.1] - 2026-03-30
+
+### Added
+- PEER relationship type for SCION Links with orange color-coded badge
+- Export button on Organization detail page (ZIP with organization, ISD-ASes, and SCION Links CSVs)
+- Edit button for each individual link on the SCION Links block in the ISD-AS detail page
+
+### Changed
+- Renamed "Core Node" label to "Appliance" on SCION Link detail page
+- Relationship badges now display in uppercase (CORE, PARENT, CHILD, PEER)
+- "Create & Add Another" on SCION Link form now preserves the selected ISD-AS value
+
+### Fixed
+- CSV export encoding: added UTF-8 BOM for proper special character display in Excel
+- CSV export of ISD-AS list no longer includes HTML links for organization name
+- CSV export of SCION Links no longer includes HTML span badges for relationship and status
+
 ## [1.4.0] - 2025-12-10
 
 ### Added

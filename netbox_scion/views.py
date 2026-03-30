@@ -1,4 +1,8 @@
-from django.http import JsonResponse
+import csv
+import io
+import zipfile
+
+from django.http import HttpResponse, JsonResponse, QueryDict
 from django.views.generic.base import RedirectView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
@@ -6,7 +10,20 @@ from netbox.views import generic
 from . import forms, models, tables, filtersets
 
 
-class PluginHomeView(generic.ObjectListView):
+UTF8_BOM = b'\xef\xbb\xbf'
+
+
+class UTF8BOMExportMixin:
+    """Prepend a UTF-8 BOM to CSV exports so Excel handles encoding correctly."""
+
+    def export_table(self, *args, **kwargs):
+        response = super().export_table(*args, **kwargs)
+        if hasattr(response, 'content'):
+            response.content = UTF8_BOM + response.content
+        return response
+
+
+class PluginHomeView(UTF8BOMExportMixin, generic.ObjectListView):
     """Home view for the SCION plugin showing all main sections."""
     queryset = models.SCIONLink.objects.select_related('isd_as', 'isd_as__organization')
     table = tables.SCIONLinkTable
@@ -49,7 +66,7 @@ class OrganizationView(generic.ObjectView):
     template_name = 'netbox_scion/organization_detail.html'
 
 
-class OrganizationListView(generic.ObjectListView):
+class OrganizationListView(UTF8BOMExportMixin, generic.ObjectListView):
     queryset = models.Organization.objects.prefetch_related('isd_ases')
     table = tables.OrganizationTable
     filterset = filtersets.OrganizationFilterSet
@@ -81,7 +98,7 @@ class ISDAView(generic.ObjectView):
     template_name = 'netbox_scion/isdas_detail.html'
 
 
-class ISDAListView(generic.ObjectListView):
+class ISDAListView(UTF8BOMExportMixin, generic.ObjectListView):
     queryset = models.ISDAS.objects.select_related('organization').prefetch_related('links')
     table = tables.ISDATable
     filterset = filtersets.ISDAFilterSet
@@ -223,7 +240,7 @@ class SCIONLinkView(generic.ObjectView):
     template_name = 'netbox_scion/scionlink_detail.html'
 
 
-class SCIONLinkListView(generic.ObjectListView):
+class SCIONLinkListView(UTF8BOMExportMixin, generic.ObjectListView):
     queryset = models.SCIONLink.objects.select_related('isd_as', 'isd_as__organization')
     table = tables.SCIONLinkTable
     filterset = filtersets.SCIONLinkFilterSet
@@ -234,6 +251,13 @@ class SCIONLinkEditView(generic.ObjectEditView):
     queryset = models.SCIONLink.objects.all()
     form = forms.SCIONLinkForm
     template_name = 'netbox_scion/scionlink_edit.html'
+
+    def get_extra_addanother_params(self, request):
+        params = QueryDict(mutable=True)
+        isd_as = request.POST.get('isd_as')
+        if isd_as:
+            params['isd_as'] = isd_as
+        return params
 
 
 class SCIONLinkDeleteView(generic.ObjectDeleteView):
@@ -249,3 +273,65 @@ class SCIONLinkChangeLogView(generic.ObjectChangeLogView):
     queryset = models.SCIONLink.objects.all()
     model = models.SCIONLink
     base_template = 'netbox_scion/scionlink_detail.html'
+
+
+def _write_csv(buf, header, rows):
+    """Write a CSV with UTF-8 BOM into *buf* (a text-mode or StringIO object)."""
+    writer = csv.writer(buf)
+    writer.writerow(header)
+    writer.writerows(rows)
+
+
+def export_organization(request, pk):
+    """Export an organization and all related ISD-ASes / SCION Links as a ZIP of CSVs."""
+    org = get_object_or_404(models.Organization, pk=pk)
+    isd_ases = models.ISDAS.objects.filter(organization=org).order_by('isd_as')
+    links = (
+        models.SCIONLink.objects
+        .filter(isd_as__organization=org)
+        .select_related('isd_as')
+        .order_by('isd_as__isd_as', 'interface_id')
+    )
+
+    zip_buf = io.BytesIO()
+    with zipfile.ZipFile(zip_buf, 'w', zipfile.ZIP_DEFLATED) as zf:
+        # organization.csv
+        org_csv = io.StringIO()
+        _write_csv(org_csv, ['Short Name', 'Full Name', 'Description'], [
+            [org.short_name, org.full_name, org.description],
+        ])
+        zf.writestr('organization.csv', UTF8_BOM.decode() + org_csv.getvalue())
+
+        # isd_ases.csv
+        isdas_csv = io.StringIO()
+        _write_csv(
+            isdas_csv,
+            ['ISD-AS', 'Description', 'Appliances'],
+            [[ia.isd_as, ia.description, ia.appliances_display] for ia in isd_ases],
+        )
+        zf.writestr('isd_ases.csv', UTF8_BOM.decode() + isdas_csv.getvalue())
+
+        # scion_links.csv
+        links_csv = io.StringIO()
+        _write_csv(
+            links_csv,
+            [
+                'ISD-AS', 'Appliance', 'Interface ID', 'Relationship', 'Status',
+                'Peer Name', 'Peer', 'Local Underlay', 'Peer Underlay', 'Ticket',
+            ],
+            [
+                [
+                    lnk.isd_as.isd_as, lnk.core, lnk.interface_id, lnk.relationship,
+                    lnk.status, lnk.peer_name, lnk.peer or '', lnk.local_underlay,
+                    lnk.peer_underlay, lnk.ticket,
+                ]
+                for lnk in links
+            ],
+        )
+        zf.writestr('scion_links.csv', UTF8_BOM.decode() + links_csv.getvalue())
+
+    zip_buf.seek(0)
+    filename = f'{org.short_name}_export.zip'
+    response = HttpResponse(zip_buf.read(), content_type='application/zip')
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    return response

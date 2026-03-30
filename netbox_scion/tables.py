@@ -57,6 +57,12 @@ class ISDATable(NetBoxTable):
             return format_html('<a href="{}">{}</a>', value.get_absolute_url(), value.short_name)
         return '—'
 
+    def value_organization(self, value, record):
+        """Plain text for CSV export"""
+        if record.organization:
+            return record.organization.short_name
+        return ''
+
     def render_links_count(self, record):
         return record.links.count()
 
@@ -112,6 +118,7 @@ class SCIONLinkTable(NetBoxTable):
         'CORE': ('#4f46e5', '#fff'),
         'CHILD': ('#14b8a6', '#fff'),
         'PARENT': ('#3b82f6', '#fff'),
+        'PEER': ('#f97316', '#fff'),
     }
 
     def _badge(self, text, bg, fg):
@@ -129,6 +136,18 @@ class SCIONLinkTable(NetBoxTable):
     def render_relationship(self, value):
         if not value:
             return ''
-        bg, fg = self.REL_COLORS.get(value, ('#6c757d', '#fff'))
-        # value already uppercase; display as given
-        return self._badge(value.title() if value.isupper() else value, bg, fg)
+        key = value.upper()
+        bg, fg = self.REL_COLORS.get(key, ('#6c757d', '#fff'))
+        return self._badge(key, bg, fg)
+
+    def value_relationship(self, value):
+        """Plain text for CSV export"""
+        return value or ''
+
+    def value_status(self, value):
+        """Plain text for CSV export"""
+        return value or ''
+
+    def value_ticket(self, value, record):
+        """Plain text for CSV export"""
+        return value or ''
